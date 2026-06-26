@@ -153,6 +153,11 @@ try:
             "class_info":  CLASS_INFO.get(predicted, {}),
         })
 
+    @app.errorhandler(500)
+    def internal_error(e):
+        import traceback
+        return f"<h1>Flask Runtime Error</h1><pre>{traceback.format_exc()}</pre>", 500
+
 except Exception as e:
     err_msg = traceback.format_exc()
     @app.route("/", defaults={"path": ""})
