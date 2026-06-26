@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MAGULU A MAYINA — Chichewa Noun Classifier{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <span class="brand-ngeli"></span><span class="brand-ngeli">MAGULU A MAYINA</span>
+        <span class="brand-sub">Chichewa Noun Classifier</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/"        class="nav-link">Classify</a></li>
+        <li><a href="/classes" class="nav-link">Noun Classes</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── PAGE CONTENT ── -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>Chichewa is the official language of Malawi — spoken by millions
+         across Malawi, Zambia, and Mozambique.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}MAGULU A MAYINA — Classify a Chichewa Noun{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO SECTION ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Classify Any<br>
+        <span class="hero-highlight">Chichewa Noun</span>
+      </h1>
+      <p class="hero-desc">
+        Enter any Chichewa noun — singular or plural — and the system
+        will predict its grammatical noun class, explain why it belongs
+        there, and break down its morphological structure.
+      </p>
+
+      
+
+    <!-- ── INPUT CARD ── -->
+    <div class="input-card">
+      <div class="input-card-header">
+        <p class="input-card-title">Enter a Chichewa Noun</p>
+        <p class="input-card-sub">
+          Type either the singular or plural form — one word only
+        </p>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-error">
+        <span class="alert-icon">⚠</span>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form action="/classify" method="POST" class="classify-form">
+        <div class="input-wrapper">
+          <label for="noun" class="input-label">Chichewa Noun</label>
+          <input
+            type="text"
+            id="noun"
+            name="noun"
+            class="noun-input"
+            placeholder="e.g. mwana, nyumba, kulima, chimanga"
+            autocomplete="off"
+            autofocus
+          >
+          <span class="input-hint">
+            Singular or plural — the system handles both
+          </span>
+        </div>
+        <button type="submit" class="classify-btn">
+          <span class="btn-text">Classify Noun</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </form>
+
+      <!-- ── example chips ── -->
+      <div class="examples-section">
+        <p class="examples-label">Try an example:</p>
+        <div class="example-chips">
+          <button class="chip" onclick="setNoun('mwana')">mwana</button>
+          <button class="chip" onclick="setNoun('chimanga')">chimanga</button>
+          <button class="chip" onclick="setNoun('nyumba')">nyumba</button>
+          <button class="chip" onclick="setNoun('kulima')">kulima</button>
+          <button class="chip" onclick="setNoun('mtengo')">mtengo</button>
+          <button class="chip" onclick="setNoun('udindo')">udindo</button>
+          <button class="chip" onclick="setNoun('kamwana')">kamwana</button>
+          <button class="chip" onclick="setNoun('buku')">buku</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how-section">
+  <div class="section-inner">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-sub">
+      The system uses a two-stage hybrid approach to classify your noun
+    </p>
+    <div class="steps-grid">
+
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <h3 class="step-title">You Enter a Noun</h3>
+        <p class="step-desc">
+          Type any Chichewa noun — either singular or plural form.
+          The system accepts both and processes them the same way.
+        </p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h3 class="step-title">Language Detection</h3>
+        <p class="step-desc">
+          The detector checks whether the word matches known
+          Chichewa morphological and phonological patterns.
+          If not, you are warned immediately.
+        </p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h3 class="step-title">Hybrid Classification</h3>
+        <p class="step-desc">
+          The rule-based engine checks morphological prefix rules first.
+          If confident, it classifies directly. Otherwise the
+          Random Forest ML model takes over.
+        </p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <h3 class="step-title">Full Explanation</h3>
+        <p class="step-desc">
+          You receive the predicted noun class, a full explanation
+          of why, a morphological breakdown, confidence score,
+          and examples from the same class.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── NOUN CLASSES PREVIEW ── -->
+<section class="classes-preview">
+  <!-- <div class="section-inner">
+    <h2 class="section-title">The 9 Chichewa Noun Classes</h2>
+    <p class="section-sub">
+      Chichewa organises all its nouns into 9 grammatical classes.
+      Each class has a unique prefix pattern that governs
+      agreement with verbs, adjectives, and pronouns.
+    </p>
+    <div class="classes-grid">
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #1A5C20">
+        <span class="class-tag">mu-a</span>
+        <p>People &amp; animate beings</p>
+        <span class="class-eg">mwana / ana</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #0D6B6E">
+        <span class="class-tag">mu-mi</span>
+        <p>Trees &amp; plants</p>
+        <span class="class-eg">mtengo / mitengo</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #6B2D8B">
+        <span class="class-tag">li-ma</span>
+        <p>Objects &amp; abstract things</p>
+        <span class="class-eg">buku / mabuku</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #B54708">
+        <span class="class-tag">chi-zi</span>
+        <p>Things &amp; inanimate objects</p>
+        <span class="class-eg">chimbuzi / zimbuzi</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #1565C0">
+        <span class="class-tag">i-zi</span>
+        <p>Animals &amp; loanwords</p>
+        <span class="class-eg">nyumba / nyumba</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #7B1FA2">
+        <span class="class-tag">u-ma</span>
+        <p>Abstract concepts</p>
+        <span class="class-eg">udindo / maudindo</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #2D6A1F">
+        <span class="class-tag">ka-ti</span>
+        <p>Diminutives</p>
+        <span class="class-eg">kamwana / tiana</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #C62828">
+        <span class="class-tag">ku-pa-mu</span>
+        <p>Locatives — places</p>
+        <span class="class-eg">kumunda / pumunda / mmunda</span>
+      </a>
+      <a href="/classes" class="class-preview-card" style="border-top: 4px solid #4E342E">
+        <span class="class-tag">ku+tsinde la mneni</span>
+        <p>Verbal nouns</p>
+        <span class="class-eg">kulima / kulima</span>
+      </a>
+    </div> -->
+    <div class="classes-cta">
+      <a href="/classes" class="outline-btn">View All Noun Classes →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function setNoun(word) {
+  document.getElementById('noun').value = word;
+  document.getElementById('noun').focus();
+}
+</script>
+
+{% endblock %}

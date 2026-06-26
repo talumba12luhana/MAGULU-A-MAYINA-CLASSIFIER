@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}MAGULU A MAYINA — All Chichewa Noun Classes{% endblock %}
+
+{% block content %}
+
+<!-- ── PAGE HEADER ── -->
+<section class="page-header">
+  <div class="section-inner">
+    <span class="hero-eyebrow">Reference Guide</span>
+    <h1 class="page-title">The 9 Chichewa Noun Classes</h1>
+    <p class="page-sub">
+      Chichewa is a Bantu language that organises all its nouns into
+      grammatical noun classes. Every noun class has a unique prefix
+      pattern that governs agreement with verbs, adjectives, pronouns,
+      and demonstratives throughout a sentence. Understanding noun classes
+      is fundamental to grammatically correct Chichewa.
+    </p>
+  </div>
+</section>
+
+<!-- ── CLASSES DETAIL ── -->
+<section class="classes-detail-section">
+  <div class="section-inner">
+
+    {% for cls, info in class_info.items() %}
+
+    <!-- count nouns in this class from dataset -->
+    {% set count = dataset[dataset['class'] == cls] | list | length %}
+
+    <div class="class-detail-card"
+      style="border-left: 6px solid {{ info.colour }};">
+
+      <!-- header -->
+      <div class="class-detail-header">
+        <div class="class-detail-left">
+          <div class="class-detail-badge"
+            style="background: {{ info.colour }};">
+            {{ cls }}
+          </div>
+          <div class="class-detail-title-group">
+            <h2 class="class-detail-name">{{ info.full_name }}</h2>
+            <p class="class-detail-desc">{{ info.description }}</p>
+          </div>
+        </div>
+        <!-- <div class="class-detail-right">
+          <div class="class-count-box"
+            style="border: 2px solid {{ info.colour }};
+                   color: {{ info.colour }};">
+            <span class="class-count-num">{{ count }}</span>
+            <span class="class-count-label">nouns in dataset</span>
+          </div>
+        </div> -->
+      </div>
+
+      <!-- prefix info row -->
+      <div class="class-prefix-row">
+        <div class="class-prefix-box">
+          <span class="prefix-box-label">Singular Prefix</span>
+          <span class="prefix-box-value"
+            style="color: {{ info.colour }};">
+            {{ info.singular_prefix }}
+          </span>
+        </div>
+        <div class="prefix-box-arrow"
+          style="color: {{ info.colour }};">→</div>
+        <div class="class-prefix-box">
+          <span class="prefix-box-label">Plural Prefix</span>
+          <span class="prefix-box-value"
+            style="color: {{ info.colour }};">
+            {{ info.plural_prefix }}
+          </span>
+        </div>
+      </div>
+
+      <!-- examples -->
+      <!-- <div class="class-examples-section">
+        <p class="class-examples-title">Examples</p>
+        <div class="class-examples-grid">
+          {% for ex in info.examples %}
+          <div class="class-example-chip"
+            style="border: 1.5px solid {{ info.colour }};
+                   color: {{ info.colour }};">
+            {{ ex }}
+          </div>
+          {% endfor %}
+        </div>
+      </div> -->
+
+      <!-- nouns from dataset -->
+      {% set class_nouns = dataset[dataset['class'] == cls] %}
+      {% if class_nouns | list | length > 0 %}
+      <div class="class-dataset-section">
+        <p class="class-examples-title">
+          From the database
+          <span class="dataset-count"
+            style="color: {{ info.colour }};">
+            (showing up to 10)
+          </span>
+        </p>
+        <div class="dataset-nouns-grid">
+          {% for _, row in class_nouns.head(10).iterrows() %}
+          <div class="dataset-noun-item">
+            <span class="dataset-singular">
+              {{ row['singular nouns'] }}
+            </span>
+            <span class="dataset-slash">/</span>
+            <span class="dataset-plural">
+              {{ row['plural nouns'] }}
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- classify button -->
+      <div class="class-action">
+        <a href="/" class="class-try-btn"
+          style="background: {{ info.colour }};">
+          Classify a {{ cls }} Noun →
+        </a>
+      </div>
+
+    </div>
+
+    {% endfor %}
+
+  </div>
+</section>
+
+<!-- ── SUMMARY TABLE ── -->
+<!-- <section class="summary-section">
+  <div class="section-inner">
+    <h2 class="section-title">Quick Reference Table</h2>
+    <p class="section-sub">
+      All 9 noun classes at a glance — prefixes, descriptions,
+      and example nouns
+    </p>
+    <div class="table-wrapper">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Full Name</th>
+            <th>Singular Prefix</th>
+            <th>Plural Prefix</th>
+            <th>Semantic Category</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cls, info in class_info.items() %}
+          <tr>
+            <td>
+              <span class="table-badge"
+                style="background: {{ info.colour }};">
+                {{ cls }}
+              </span>
+            </td>
+            <td class="table-fullname">{{ info.full_name }}</td>
+            <td class="table-prefix">{{ info.singular_prefix }}</td>
+            <td class="table-prefix">{{ info.plural_prefix }}</td>
+            <td>{{ info.description }}</td>
+            <td class="table-example">{{ info.examples[0] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section> -->
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="cta-card">
+      <h2 class="cta-title">Ready to Classify a Noun?</h2>
+      <p class="cta-sub">
+        Enter any Chichewa noun and the hybrid system will
+        predict its class and explain exactly why.
+      </p>
+      <a href="/" class="classify-btn">
+        <span class="btn-text">Start Classifying</span>
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

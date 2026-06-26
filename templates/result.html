@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% block title %}ChiNgeli — Result for "{{ noun }}"{% endblock %}
+
+{% block content %}
+
+<!-- ── WARNING BANNER (non-Chichewa word) ── -->
+{% if not lang_result.is_chichewa %}
+<div class="warning-banner">
+  <div class="warning-inner">
+    <span class="warning-icon">⚠</span>
+    <div class="warning-text">
+      <strong>Language Warning</strong>
+      <p>{{ lang_result.reason }}</p>
+      {% for w in lang_result.warnings %}
+      <p>{{ w }}</p>
+      {% endfor %}
+    </div>
+    <a href="/" class="warning-btn">Try Another Noun</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- ── RESULT HERO ── -->
+<section class="result-hero"
+  style="border-bottom: 4px solid {{ class_info.colour }};">
+  <div class="result-hero-inner">
+
+    <div class="result-left">
+      <a href="/" class="back-link">← Classify Another Noun</a>
+      <p class="result-noun-label">You entered</p>
+      <h1 class="result-noun">"{{ noun }}"</h1>
+
+      <div class="result-class-badge"
+        style="background: {{ class_info.colour }};">
+        {{ predicted }}
+      </div>
+
+      <p class="result-class-fullname">
+        {{ class_info.full_name }}
+      </p>
+      <p class="result-class-desc">
+        {{ class_info.description }}
+      </p>
+    </div>
+
+    <div class="result-right">
+      <!-- confidence ring -->
+      <div class="confidence-card">
+        <p class="conf-label">Confidence Score</p>
+        <div class="conf-ring">
+          <svg viewBox="0 0 120 120" class="ring-svg">
+            <circle cx="60" cy="60" r="50"
+              fill="none" stroke="#e8e8e8" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50"
+              fill="none"
+              stroke="{{ class_info.colour }}"
+              stroke-width="10"
+              stroke-linecap="round"
+              stroke-dasharray="{{ (confidence / 100) * 314.16 }} 314.16"
+              stroke-dashoffset="78.54"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="conf-number">{{ confidence }}%</div>
+        </div>
+      </div>
+
+      <!-- prefix info -->
+      <div class="prefix-card">
+        <div class="prefix-row">
+          <span class="prefix-label">Singular prefix</span>
+          <span class="prefix-value"
+            style="color: {{ class_info.colour }};">
+            {{ class_info.singular_prefix }}
+          </span>
+        </div>
+        <div class="prefix-divider"></div>
+        <div class="prefix-row">
+          <span class="prefix-label">Plural prefix</span>
+          <span class="prefix-value"
+            style="color: {{ class_info.colour }};">
+            {{ class_info.plural_prefix }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── MAIN RESULT BODY ── -->
+<div class="result-body">
+  <div class="result-body-inner">
+
+    <!-- LEFT COLUMN -->
+    <div class="result-col-left">
+
+      <!-- Explanation -->
+      <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">💡</span>
+          Why This Class?
+        </h2>
+        <!-- <p class="explanation-summary">
+          {{ explanation.summary | safe }}
+        </p> -->
+        <div class="explanation-detail">
+          {{ explanation.why }}
+        </div>
+      </div>
+
+      <!-- Morphological breakdown -->
+      <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">🔬</span>
+          Morphological Breakdown
+        </h2>
+        <div class="morphology-visual">
+          <div class="morph-block"
+            style="border-top: 3px solid {{ class_info.colour }};">
+            <span class="morph-part">{{ morphology.prefix }}</span>
+            <span class="morph-role">Prefix</span>
+          </div>
+          <span class="morph-plus">+</span>
+          <div class="morph-block"
+            style="border-top: 3px solid #333;">
+            <span class="morph-part">{{ morphology.root }}</span>
+            <span class="morph-role">Root</span>
+          </div>
+          <span class="morph-plus">+</span>
+          <div class="morph-block"
+            style="border-top: 3px solid #888;">
+            <span class="morph-part">{{ morphology.suffix }}</span>
+            <span class="morph-role">Suffix</span>
+          </div>
+        </div>
+        <p class="morphology-note">{{ explanation.morphology }}</p>
+      </div>
+
+      <!-- Prefix and plural rules -->
+      <!-- <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">📐</span>
+          Classification Rules Applied
+        </h2>
+        <div class="rule-row">
+          <span class="rule-icon"
+            style="background: {{ class_info.colour }};">P</span>
+          <p>{{ explanation.prefix_rule }}</p>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon"
+            style="background: {{ class_info.colour }};">R</span>
+          <p>{{ explanation.plural_rule }}</p>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon"
+            style="background: {{ class_info.colour }};">S</span>
+          <p>{{ explanation.semantic }}</p>
+        </div>
+      </div>
+ -->
+      <!-- Method note -->
+      <!-- <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">⚙</span>
+          Classification Method
+        </h2>
+        <p>{{ explanation.method_note }}</p>
+        <p class="language-note">{{ explanation.language }}</p>
+      </div>
+
+    </div>
+ -->
+    <!-- RIGHT COLUMN -->
+    <!-- <div class="result-col-right"> -->
+
+      <!-- All class scores -->
+      <!-- <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">📊</span>
+          All Class Scores
+        </h2>
+        {% for cls, score in all_scores.items() | sort(attribute='1', reverse=True) %}
+        <div class="score-row">
+          <span class="score-class
+            {% if cls == predicted %}score-class-selected{% endif %}">
+            {{ cls }}
+          </span>
+          <div class="score-bar-wrap">
+            <div class="score-bar"
+              style="width: {{ score }}%;
+              background: {% if cls == predicted %}
+                {{ class_info.colour }}
+              {% else %}
+                #cccccc
+              {% endif %};">
+            </div>
+          </div>
+          <span class="score-pct
+            {% if cls == predicted %}score-pct-selected{% endif %}">
+            {{ score }}%
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+ -->
+      <!-- Examples from same class -->
+      <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">📚</span>
+          Other Nouns in {{ predicted }} Class
+        </h2>
+        {% if examples %}
+        <div class="examples-list">
+          {% for ex in examples %}
+          <div class="example-item">
+            <span class="example-dot"
+              style="background: {{ class_info.colour }};"></span>
+            <span class="example-word">{{ ex }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-examples">No examples available.</p>
+        {% endif %}
+      </div>
+
+      <!-- Class comparison -->
+      <div class="result-card">
+        <h2 class="card-title">
+          <span class="card-icon">🔍</span>
+          Why Not Other Classes?
+        </h2>
+        {% for item in comparison %}
+        <div class="comparison-item
+          {% if item.status == 'selected' %}comp-selected
+          {% elif item.status == 'close' %}comp-close
+          {% else %}comp-low{% endif %}">
+          <div class="comp-header">
+            <span class="comp-class">{{ item.class }}</span>
+            <span class="comp-score">{{ item.score }}%</span>
+          </div>
+          <p class="comp-note">{{ item.note }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Try another -->
+      <div class="try-again-card">
+        <p>Want to classify another noun?</p>
+        <a href="/" class="classify-btn">
+          <span class="btn-text">Classify Another Noun</span>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
