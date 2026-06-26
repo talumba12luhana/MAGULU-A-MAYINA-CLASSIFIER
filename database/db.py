@@ -24,9 +24,11 @@ from flask import g
 # Override DATABASE_URL env-var to switch to PostgreSQL without code changes.
 # e.g.  DATABASE_URL=postgresql://user:pass@host/dbname
 _DB_FILE = pathlib.Path(__file__).parent.parent / "chichewa.db"
+db_path = _DB_FILE.as_posix()
+
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    f"sqlite:///{_DB_FILE}"
+    f"sqlite:///file:{db_path}?mode=ro&uri=true"
 )
 
 _engine = create_engine(
