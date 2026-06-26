@@ -115,10 +115,17 @@ try:
         Data comes from the DB instead of the pandas dataset.
         """
         all_cls = get_all_classes()
+        
+        # Fetch up to 10 examples for each class to display in the UI
+        class_examples_dict = {}
+        for cls in CLASS_INFO.keys():
+            class_examples_dict[cls] = get_examples(cls)
+            
         return render_template(
             "classes.html",
             class_info = CLASS_INFO,    # kept for backward-compat with template
             all_classes = all_cls,      # richer DB-sourced list for future use
+            class_examples = class_examples_dict # Replaces the pandas dataset
         )
 
     @app.route("/api/classify", methods=["POST"])

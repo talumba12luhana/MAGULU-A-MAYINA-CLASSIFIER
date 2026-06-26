@@ -24,8 +24,7 @@
 
     {% for cls, info in class_info.items() %}
 
-    <!-- count nouns in this class from dataset -->
-    {% set count = dataset[dataset['class'] == cls] | list | length %}
+    <!-- class detail section -->
 
     <div class="class-detail-card"
       style="border-left: 6px solid {{ info.colour }};">
@@ -87,8 +86,8 @@
       </div> -->
 
       <!-- nouns from dataset -->
-      {% set class_nouns = dataset[dataset['class'] == cls] %}
-      {% if class_nouns | list | length > 0 %}
+      {% set class_nouns = class_examples.get(cls, []) %}
+      {% if class_nouns | length > 0 %}
       <div class="class-dataset-section">
         <p class="class-examples-title">
           From the database
@@ -98,14 +97,14 @@
           </span>
         </p>
         <div class="dataset-nouns-grid">
-          {% for _, row in class_nouns.head(10).iterrows() %}
+          {% for row in class_nouns %}
           <div class="dataset-noun-item">
             <span class="dataset-singular">
-              {{ row['singular nouns'] }}
+              {{ row.singular }}
             </span>
             <span class="dataset-slash">/</span>
             <span class="dataset-plural">
-              {{ row['plural nouns'] }}
+              {{ row.plural }}
             </span>
           </div>
           {% endfor %}
