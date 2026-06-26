@@ -64,7 +64,7 @@ def close_db(e=None):
 
 # ── Query helpers ─────────────────────────────────────────────────────────────
 
-def get_examples(class_key: str, exclude_noun: str, n: int = 6) -> list:
+def get_examples(class_key: str, exclude_noun: str = "", n: int = 6) -> list:
     """
     Return up to `n` random singular/plural pairs for `class_key`,
     excluding the noun that was just classified.
