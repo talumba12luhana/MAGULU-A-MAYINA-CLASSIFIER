@@ -83,7 +83,7 @@ def get_examples(class_key: str, exclude_noun: str = "", n: int = 6) -> list:
         """),
         {"ck": class_key, "noun": exclude_noun.lower().strip(), "n": n},
     ).fetchall()
-    return [f"{r.singular} / {r.plural}" for r in rows]
+    return [{"singular": r.singular, "plural": r.plural} for r in rows]
 
 
 def get_class_info(class_key: str) -> dict:
