@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+
+# DO NOT ignore the following files because Vercel needs them to run the app:
+# !chichewa.db
+# !chichewa_noun_classifier.pkl

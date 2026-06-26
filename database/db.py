@@ -12,15 +12,21 @@ Design:
 """
 
 import os
+import pathlib
 from sqlalchemy import create_engine, text
 from flask import g
 
 # ── Engine setup ─────────────────────────────────────────────────────────────
+# Build an absolute path to chichewa.db relative to THIS file so the database
+# is always found regardless of the working directory (critical for Vercel
+# serverless functions where CWD is not the project root).
+#
 # Override DATABASE_URL env-var to switch to PostgreSQL without code changes.
 # e.g.  DATABASE_URL=postgresql://user:pass@host/dbname
+_DB_FILE = pathlib.Path(__file__).parent.parent / "chichewa.db"
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "sqlite:///chichewa.db"   # relative to the working directory
+    f"sqlite:///{_DB_FILE}"
 )
 
 _engine = create_engine(
